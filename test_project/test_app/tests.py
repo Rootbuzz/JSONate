@@ -9,16 +9,15 @@ from test_app.models import MyModel
 from jsonate import jsonate
 import json
 
-
-class JsonateTests(TestCase):        
-    maxDiff = 10**4
-    def setUp(self):
-        def destroy_media_folder(folder):
+def destroy_media_folder(folder):
             path = join(settings.MEDIA_ROOT, folder)
             [unlink(f) for f in glob(join(path, "*"))]
             try: rmdir(path)
             except: pass
-        
+            
+class JsonateTests(TestCase):        
+    maxDiff = 10**4
+    def setUp(self):
         destroy_media_folder("files")
         destroy_media_folder("images")
         
@@ -30,6 +29,10 @@ class JsonateTests(TestCase):
         self.model.image_field.save("image_file.wbm", ContentFile('\x00\x00\x01\x01\x80'))
         self.model.save()
     
+    def tearDown(self):
+        destroy_media_folder("files")
+        destroy_media_folder("images")
+    
     def assertJsonEqual(self, obj1, obj2, *args, **kwargs):
         obj1 = json.loads(obj1)
         
@@ -40,20 +43,19 @@ class JsonateTests(TestCase):
     
     def test_basic_serialization(self):
         model_data = {
-            u"float_field": 32.25, 
-            u"normal_field1": u"field1", 
-            u"normal_field2": u"field2", 
-            u"boolean_field": True, 
-            u"null_field": None, 
-            u"decimal_field": 32.25,
-            u"foreign_key": 1, 
-            u"datetime_field": u"2011-01-11T11:11:11", 
-            u"image_field": u"/media/images/image_file.wbm", 
-            u"date_field": u"2011-01-11", 
-            u"id": 1, 
-            u"file_field": u"/media/files/text_file.txt"
+            "float_field": 32.25, 
+            "normal_field1": "field1", 
+            "normal_field2": "field2", 
+            "boolean_field": True, 
+            "null_field": None, 
+            "decimal_field": 32.25,
+            "foreign_key": 1, 
+            "datetime_field": "2011-01-11T11:11:11", 
+            "image_field": "images/image_file.wbm", 
+            "date_field": "2011-01-11", 
+            "id": 1, 
+            "file_field": "files/text_file.txt"
         }
-        print jsonate(self.model)
-        #self.assertJsonEqual(jsonate(self.model), model_data)
-        #self.assertJsonEqual(jsonate(MyModel.objects.all()), [model_data])
+        self.assertJsonEqual(jsonate(self.model), model_data)
+        self.assertJsonEqual(jsonate(MyModel.objects.all()), [model_data])
     

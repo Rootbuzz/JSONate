@@ -47,14 +47,16 @@ def jsonate_fields(model):
 ##  Mapping functions  ##
 #########################
 
+# Must come before map_queryset because ValuesQuerySet is
+# a subclass of Queryset and will cause an infinite loop :(
+@register_typemap(ValuesQuerySet)
+def map_values_queryset(obj):
+    return list(obj)
+
 @register_typemap(QuerySet)
 def map_queryset(obj):
     fields = jsonate_fields(obj.model)
     return obj.values(*[field.name for field in fields])
-
-@register_typemap(ValuesQuerySet)
-def map_values_queryset(obj):
-    return list(obj)
 
 @register_typemap(Model)
 def map_model_instance(obj):
@@ -68,7 +70,7 @@ def map_model_instance(obj):
 
 @register_typemap(FieldFile)
 def map_filefield_file(obj):
-    return obj.url
+    return obj.name
 
 @register_typemap(date)
 @register_typemap(datetime)
