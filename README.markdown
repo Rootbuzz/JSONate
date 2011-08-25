@@ -15,7 +15,7 @@
 
 ### In templates
 
-    {% load jsonate %}
+    {% load jsonate_tags %}
 
     {{ anything|jsonate }}
 
