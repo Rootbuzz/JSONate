@@ -10,10 +10,10 @@ from jsonate import jsonate
 import json
 
 def destroy_media_folder(folder):
-            path = join(settings.MEDIA_ROOT, folder)
-            [unlink(f) for f in glob(join(path, "*"))]
-            try: rmdir(path)
-            except: pass
+    path = join(settings.MEDIA_ROOT, folder)
+    [unlink(f) for f in glob(join(path, "*"))]
+    try: rmdir(path)
+    except: pass
             
 class JsonateTests(TestCase):        
     maxDiff = 10**4
@@ -42,7 +42,7 @@ class JsonateTests(TestCase):
         self.assertEqual(obj1, obj2, *args, **kwargs)
     
     def test_basic_serialization(self):
-        model_data = {
+        mymodel_data = {
             "float_field": 32.25, 
             "normal_field1": "field1", 
             "normal_field2": "field2", 
@@ -56,6 +56,12 @@ class JsonateTests(TestCase):
             "id": 1, 
             "file_field": "files/text_file.txt"
         }
-        self.assertJsonEqual(jsonate(self.model), model_data)
-        self.assertJsonEqual(jsonate(MyModel.objects.all()), [model_data])
+        self.assertJsonEqual(jsonate(self.model), mymodel_data)
+        self.assertJsonEqual(jsonate(MyModel.objects.all()), [mymodel_data])
+        
+        user_data = [{
+            "username": 'asdf',
+            "password": self.user.password
+        }]
+        self.assertJsonEqual(jsonate(User.objects.values("username", "password")), user_data)
     
