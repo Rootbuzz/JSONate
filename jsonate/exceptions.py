@@ -1,0 +1,2 @@
+
+class CouldntSerialize(Exception): pass

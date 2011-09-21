@@ -6,6 +6,8 @@ from django.db.models import Model
 from django.db.models.fields.related import ForeignKey
 from django.db.models.fields.files import FieldFile
 
+from jsonate.exceptions import CouldntSerialize
+
 # Custom encoder using a list of mapping functions
 type_map = []
 class JsonateEncoder(json.JSONEncoder):
@@ -14,7 +16,10 @@ class JsonateEncoder(json.JSONEncoder):
             if isinstance(obj, obj_type):
                 # recurse until we get to an object the encoder
                 # can handle natively
-                return self.default(mapper(obj))
+                try:
+                    return self.default(mapper(obj))
+                except CouldntSerialize:
+                    pass
         try:
             # this will handle the non-string things that
             # the default encoder can handle (like numbers, booleans etc)
@@ -47,6 +52,15 @@ def jsonate_fields(model):
 ##  Mapping functions  ##
 #########################
 
+# If the object knows how to serialize itself... let
+# it do it's thing
+@register_typemap(object)
+def map_object(obj):
+    try:
+        return obj.toJSON()
+    except AttributeError:
+        raise CouldntSerialize
+    
 # Must come before map_queryset because ValuesQuerySet is
 # a subclass of Queryset and will cause an infinite loop :(
 @register_typemap(ValuesQuerySet)
