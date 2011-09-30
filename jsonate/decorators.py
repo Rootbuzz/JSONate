@@ -38,10 +38,12 @@ def jsonate_request(func):
                 return form.errors
     """
     @wraps(func)
-    def wrapper(*args, **kwargs):
-        resp = func(*args, **kwargs)
+    def wrapper(request, *args, **kwargs):
+        resp = func(request, *args, **kwargs)
         if isinstance(resp, HttpResponse):
             return resp
         else:
+            if request.GET.get("callback"):
+                return JsonateResponse(resp, jsonp_callback=request.GET['callback'])
             return JsonateResponse(resp)
     return wrapper
