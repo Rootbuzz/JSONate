@@ -39,9 +39,11 @@ def jsonate_request(func):
     """
     @wraps(func)
     def wrapper(*args, **kwargs):
+        '''  args[0] : must be  a WSGIRequest 
+        '''
         resp = func(*args, **kwargs)
         if isinstance(resp, HttpResponse):
             return resp
         else:
-            return JsonateResponse(resp)
+            return JsonateResponse(resp,request=args[0] if len(args)>0 else None )
     return wrapper
