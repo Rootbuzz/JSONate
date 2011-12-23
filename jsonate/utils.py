@@ -1,7 +1,4 @@
-try:
-    import json
-except ImportError:
-    from simplejson import json
+from django.utils import simplejson as json
      
 from jsonate.json_encoder import JsonateEncoder
 
