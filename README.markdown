@@ -116,10 +116,13 @@ Example:
     
     …
     
+    from jsonate import jsonate
+    
     my_model = MyModel(
         normal_info="hi mom", 
         sensitive_info="My Social Security number is: ###-##-####"
         )
+        
     jsonate(my_model)
     # {"normal_info": "hi mom", "serialized_at": 1345233658.29246}
     
