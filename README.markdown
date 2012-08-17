@@ -74,6 +74,8 @@ just like the Admin!
 
 Example
 	
+	from django.db import models
+	
 	class MyModel(models.Model):
 		normal_info = models.CharField(max_length=10)
 		sensitive_info = models.CharField(max_length=10)
@@ -94,6 +96,33 @@ use `values()` instead. like so
 
 note: this is obviously not a real password or salt :)
 
+You can also specify a `to_json()` method on your model to more tightly control serialization.
+
+When Jsonate serializes an object, the `to_json()` method will *always* be used
+if it is found. The method may return any object that Jsonate can serialize (be careful of infinite 
+loops).
+
+Example:
+
+    import time
+    from django.db import models
+    
+    class MyModel(models.Model):
+        normal_info = models.CharField(max_length=10)
+        sensitive_info = models.CharField(max_length=10)
+        
+        def to_json(self):
+            return {"normal_info": self.normal_info, "serialized_at": time.time()}
+    
+    …
+    
+    my_model = MyModel(
+        normal_info="hi mom", 
+        sensitive_info="My Social Security number is: ###-##-####"
+        )
+    jsonate(my_model)
+    # {"normal_info": "hi mom", "serialized_at": 1345233658.29246}
+    
 ## JsonateField
 
 JsonateField is a simple JSONField like the ever popular JSONField project.

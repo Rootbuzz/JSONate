@@ -56,10 +56,10 @@ def jsonate_fields(model):
 # it do it's thing
 @register_typemap(object)
 def map_object(obj):
-    try:
-        return obj.toJSON()
-    except AttributeError:
+    to_json = getattr(obj, "to_json", getattr(obj, "toJSON", None))
+    if to_json is None: 
         raise CouldntSerialize
+    return to_json()
     
 # Must come before map_queryset because ValuesQuerySet is
 # a subclass of Queryset and will cause an infinite loop :(
