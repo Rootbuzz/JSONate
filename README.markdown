@@ -66,7 +66,7 @@ Jsonate turns datetimes into iso format for easy parsing in javascript
     	"date_joined": "2011-08-22T19:14:50.220049"
     }
     
-## Fields / Exclude options
+## Fields / Exclude -- Serialization options
 
 You may specify which fields should be serialized in the meta options of
 your models. This affects the serialization of model instances, and querysets,
@@ -93,6 +93,31 @@ use `values()` instead. like so
     ... '[{"username": "someuser", "password": "sha1$f26b2$d03a6123487fce20aabcdef0987654321abcdef0"}]'
 
 note: this is obviously not a real password or salt :)
+
+## JsonateField
+
+JsonateField is a simple JSONField like the ever popular JSONField project.
+The only difference is JsonateField uses the Jsonate JSON serializer, which
+makes it more robust than other JSONField implementations.
+
+example:
+
+    from django.db import models
+    from jsonate.fields import JsonateField
+    
+    class Customer(models.Model):
+        extra_data = JsonateField(blank=True, null=True)
+        
+    …
+    
+    customer = Customer()
+    customer.extra_data = {
+        "height": 65,
+        "weight": 115,
+    }
+    customer.save()
+
+Don't ask me why you'd care about your customer's height and weight.
 
 ## The JsonateResponse
 
