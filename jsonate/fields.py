@@ -22,3 +22,5 @@ class JsonateField(models.TextField):
         value = jsonate(value)
         return super(JsonateField, self).get_db_prep_save(value, *args, **kwargs)
     
+from south.modelsinspector import add_introspection_rules
+add_introspection_rules([], ["^jsonate\.fields\.JsonateField"])
