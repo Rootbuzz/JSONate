@@ -82,6 +82,10 @@ def map_model_instance(obj):
         d[field.name] = value
     return d
 
+@register_typemap(set)
+def map_set(obj):
+    return list(obj)
+
 @register_typemap(FieldFile)
 def map_filefield_file(obj):
     return obj.name
