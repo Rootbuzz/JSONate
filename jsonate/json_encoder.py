@@ -69,6 +69,11 @@ def map_values_queryset(obj):
 
 @register_typemap(QuerySet)
 def map_queryset(obj):
+    # if the model wants to serialize itself, go with that...
+    if hasattr(obj.model, 'to_json') or hasattr(obj.model, 'toJSON'):
+        return list(obj)
+        
+    # otherwise using values is faster
     fields = jsonate_fields(obj.model)
     return obj.values(*[field.name for field in fields])
 

@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='jsonate',
-    version='0.2.3',
+    version='0.2.4',
     
     author='James Robert',
     author_email='jiaaro@gmail.com',
