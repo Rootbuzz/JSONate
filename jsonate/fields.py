@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils import simplejson as json
 from jsonate.utils import jsonate
+from jsonate.widgets import JsonateWidget
+
 
 class JsonateField(models.TextField):
     __metaclass__ = models.SubfieldBase
@@ -21,6 +23,11 @@ class JsonateField(models.TextField):
             return None
         value = jsonate(value)
         return super(JsonateField, self).get_db_prep_save(value, *args, **kwargs)
+    
+    def formfield(self, **kwargs):
+        defaults = {'widget': JsonateWidget}
+        defaults.update(kwargs)
+        return super(JsonateField, self).formfield(**defaults)
     
 from south.modelsinspector import add_introspection_rules
 add_introspection_rules([], ["^jsonate\.fields\.JsonateField"])
