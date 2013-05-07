@@ -151,6 +151,47 @@ example:
 
 Don't ask me why you'd care about your customer's height and weight.
 
+## In Forms
+
+If you want the Json input to be validated there is a validator:
+
+  from django import forms
+  from jsonate.form_fields import JsonateValidator
+  
+  class MyForm(forms.Form):
+      json_input = forms.CharField(validators=[JsonateValidator])
+
+...but you should probably just use the JsonateFormField (which uses the 
+validator):
+
+  from django import forms
+  from jsonate.form_fields import JsonateFormField
+  
+  class MyForm(forms.Form):
+      json_input = JsonateFormField()
+  
+  
+## In the Admin
+
+If you're using the JsonateField in any of your models you'll probably
+want the input to be validated in the admin (using the JsonateFormField):
+
+    from django.contrib import admin
+    from myapp.models import MyModel
+    
+    # Add this to your imports:
+    from jsonate.fields import JsonateField
+    from jsonate.form_fields import JsonateFormField
+    
+    
+    class MyModelAdmin(admin.ModelAdmin):
+        
+        # Add this to your ModelAdmin:
+        formfield_overrides = {
+            JsonateField: {'form_class': JsonateFormField }
+        }
+
+
 ## The JsonateResponse
 
 `JsonateResponse` is a subclass of HttpResponse that works almost exactly
