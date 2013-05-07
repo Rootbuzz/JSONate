@@ -155,20 +155,20 @@ Don't ask me why you'd care about your customer's height and weight.
 
 If you want the Json input to be validated there is a validator:
 
-  from django import forms
-  from jsonate.form_fields import JsonateValidator
+    from django import forms
+    from jsonate.form_fields import JsonateValidator
   
-  class MyForm(forms.Form):
-      json_input = forms.CharField(validators=[JsonateValidator])
+    class MyForm(forms.Form):
+        json_input = forms.CharField(validators=[JsonateValidator])
 
 ...but you should probably just use the JsonateFormField (which uses the 
 validator):
 
-  from django import forms
-  from jsonate.form_fields import JsonateFormField
+    from django import forms
+    from jsonate.form_fields import JsonateFormField
   
-  class MyForm(forms.Form):
-      json_input = JsonateFormField()
+    class MyForm(forms.Form):
+        json_input = JsonateFormField()
   
   
 ## In the Admin
