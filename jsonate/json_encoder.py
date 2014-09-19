@@ -1,6 +1,6 @@
 from datetime import datetime, date
 from decimal import Decimal
-from django.utils import simplejson as json
+import simplejson as json
 from django.db.models.query import QuerySet, ValuesQuerySet
 from django.db.models import Model
 from django.db.models.fields.related import ForeignKey

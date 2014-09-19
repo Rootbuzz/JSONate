@@ -1,4 +1,4 @@
-from django.utils import simplejson as json
+import simplejson as json
      
 from jsonate.json_encoder import JsonateEncoder
 
