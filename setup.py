@@ -16,7 +16,7 @@ setup(
     url='https://jsonate.com',
     
     install_requires=[
-        "django",
+        "django>=1.4",
     ],
     
     packages=[
