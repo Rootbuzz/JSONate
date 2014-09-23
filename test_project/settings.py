@@ -7,11 +7,12 @@ sys.path.insert(0, os.path.join(PROJECT_ROOT, '..'))
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+SECRET_KEY = "thisIsTotallyASecretJkLolHaHa!1!!1!"
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'test_jsonate',
-        'USER': 'root'
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'test_jsonate'
     }
 }
 

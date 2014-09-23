@@ -1,5 +1,8 @@
 from django.db import models
-from django.utils import simplejson as json
+try:
+    import json
+except ImportError:
+    from django.utils import simplejson as json
 from jsonate.utils import jsonate
 from jsonate.widgets import JsonateWidget
 from jsonate.form_fields import JsonateFormField
@@ -31,6 +34,9 @@ class JsonateField(models.TextField):
         }
         defaults.update(kwargs)
         return super(JsonateField, self).formfield(**defaults)
-    
-from south.modelsinspector import add_introspection_rules
-add_introspection_rules([], ["^jsonate\.fields\.JsonateField"])
+
+try:
+    from south.modelsinspector import add_introspection_rules
+    add_introspection_rules([], ["^jsonate\.fields\.JsonateField"])
+except ImportError:
+    pass

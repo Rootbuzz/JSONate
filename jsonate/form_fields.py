@@ -1,6 +1,9 @@
 from django.forms import CharField, ValidationError
 from jsonate.widgets import JsonateWidget
-from django.utils import simplejson as json
+try:
+    import json
+except ImportError:
+    from django.utils import simplejson as json
 
  
 def JsonateValidator(value):

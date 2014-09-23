@@ -1,1 +1,1 @@
-import jsonate.monkey_patches #@UnusedImport
+import jsonate.monkey_patches
