@@ -6,7 +6,6 @@ env:
     - DJANGO=1.5
     - DJANGO=1.6
     - DJANGO=1.7
-    - DJANGO=dev
 matrix:
   exclude:
     - python: "3.2"
