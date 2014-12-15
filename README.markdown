@@ -117,19 +117,19 @@ import time
 from django.db import models
 
 class MyModel(models.Model):
-normal_info = models.CharField(max_length=10)
-sensitive_info = models.CharField(max_length=10)
+    normal_info = models.CharField(max_length=10)
+    sensitive_info = models.CharField(max_length=10)
 
-def to_json(self):
-    return {"normal_info": self.normal_info, "serialized_at": time.time()}
+    def to_json(self):
+        return {"normal_info": self.normal_info, "serialized_at": time.time()}
 
 …
 
 from jsonate import jsonate
 
 my_model = MyModel(
-normal_info="hi mom", 
-sensitive_info="My Social Security number is: ###-##-####"
+  normal_info="hi mom", 
+  sensitive_info="My Social Security number is: ###-##-####"
 )
 
 jsonate(my_model)
@@ -149,14 +149,14 @@ from django.db import models
 from jsonate.fields import JsonateField
 
 class Customer(models.Model):
-extra_data = JsonateField(blank=True, null=True)
+    extra_data = JsonateField(blank=True, null=True)
 
-…
+    …
 
 customer = Customer()
 customer.extra_data = {
-"height": 65,
-"weight": 115,
+    "height": 65,
+    "weight": 115,
 }
 customer.save()
 ```
@@ -172,7 +172,7 @@ from django import forms
 from jsonate.form_fields import JsonateValidator
 
 class MyForm(forms.Form):
-json_input = forms.CharField(validators=[JsonateValidator])
+    json_input = forms.CharField(validators=[JsonateValidator])
 ```
 
 ...but you should probably just use the JsonateFormField (which uses the 
@@ -183,7 +183,7 @@ from django import forms
 from jsonate.form_fields import JsonateFormField
 
 class MyForm(forms.Form):
-json_input = JsonateFormField()
+    json_input = JsonateFormField()
 ```
   
 ## In the Admin
@@ -202,10 +202,10 @@ from jsonate.form_fields import JsonateFormField
 
 class MyModelAdmin(admin.ModelAdmin):
 
-# Add this to your ModelAdmin:
-formfield_overrides = {
-    JsonateField: {'form_class': JsonateFormField }
-}
+    # Add this to your ModelAdmin:
+    formfield_overrides = {
+        JsonateField: {'form_class': JsonateFormField }
+    }
 ```
 
 ## The JsonateResponse
