@@ -24,16 +24,16 @@ use with javascript libraries like jQuery (note jsonate-attr is identical to jso
 
     <div id="user-widget" data-user="{{ user|jsonate_attr }}"></div>
 
-	<script>
-		...
-    	user_data = $("#user-widget").data('user');
-    	...
+    <script>
+        ...
+        user_data = $("#user-widget").data('user');
+        ...
     </script>
     
 Or just use it directly in javascript...
 
     <script>
-		var user_data = {{ user|jsonate }};
+        var user_data = {{ user|jsonate }};
     </script>
 
 ### In Python
@@ -78,17 +78,17 @@ just like the Admin!
 
 Example
 
-```python	
+```python    
 from django.db import models
 
 class MyModel(models.Model):
-	normal_info = models.CharField(max_length=10)
-	sensitive_info = models.CharField(max_length=10)
-	
-	class Meta:
-		jsonate_exclude = ('sensitive_info',)
-		# this would also work:
-		# jsonate_fields = ('normal_info',)
+    normal_info = models.CharField(max_length=10)
+    sensitive_info = models.CharField(max_length=10)
+    
+    class Meta:
+        jsonate_exclude = ('sensitive_info',)
+        # this would also work:
+        # jsonate_fields = ('normal_info',)
 ```
 
 By default the User model in `django.contrib.auth.models` is monkey-patched
@@ -220,9 +220,9 @@ example:
 from jsonate.http import JsonateResponse
 
 def my_view(request):
-	...
-	return JsonateResponse(request.user)
-	
+    ...
+    return JsonateResponse(request.user)
+    
 # response contains:
 {"username": "asdfasdf", "first_name": "asdf", "last_name": "asdf", "is_active": false, "email": "asdf@example.com", "is_superuser": false, "is_staff": false, "last_login": "2011-08-22T19:14:50.603531", "id": 5, "date_joined": "2011-08-22T19:14:50.220049"}
 ```
@@ -243,14 +243,14 @@ example:
 ```python
 @jsonate_request
 def my_view(request):
-	form = MyForm(request.POST)
-	if form.is_valid():
-		form.save()
-		return HttpResponseRedirect("/some/path/")
-	else:
-		return form.errors
+    form = MyForm(request.POST)
+    if form.is_valid():
+        form.save()
+        return HttpResponseRedirect("/some/path/")
+    else:
+        return form.errors
 ```
-			
+            
 With valid input, the HttpResponseRedirect passes through, untouched.
 
 If there are form errors the response comes back looking something like
