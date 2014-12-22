@@ -13,7 +13,7 @@ setup(
     license='MIT',
     keywords='django json templatetags',
     
-    url='https://jsonate.com',
+    url='http://jsonate.com',
     
     install_requires=[
         "django>=1.4",
