@@ -22,6 +22,8 @@ TEMPLATE_DIRS = (
     os.path.join(PROJECT_ROOT, 'templates'),
 )
 
+SECRET_KEY = "dna_kzxq8(QbM=-#ZyyA&k,Fi1LU>&bQ4ZA+|(e<g-.%L0JnaK"
+
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

@@ -1,5 +1,5 @@
 from django.db import models
-from django.utils import simplejson as json
+import json
 from jsonate.utils import jsonate
 from jsonate.widgets import JsonateWidget
 from jsonate.form_fields import JsonateFormField
