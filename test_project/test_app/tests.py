@@ -1,6 +1,8 @@
 from os import unlink, rmdir
 from os.path import join
 from glob import glob
+import unittest
+
 from django.test import TestCase
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -64,4 +66,10 @@ class JsonateTests(TestCase):
             "password": self.user.password
         }]
         self.assertJsonEqual(jsonate(User.objects.values("username", "password")), user_data)
-    
+
+from django.core import management
+
+if __name__ == "__main__":
+    management.call_command("migrate")
+
+    unittest.main()
