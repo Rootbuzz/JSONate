@@ -1,7 +1,7 @@
 from datetime import datetime, date
 from decimal import Decimal
 import json
-from django.db.models.query import QuerySet, ValuesQuerySet
+from django.db.models.query import QuerySet
 from django.db.models import Model
 from django.db.models.fields.related import ForeignKey
 from django.db.models.fields.files import FieldFile
@@ -61,11 +61,6 @@ def map_object(obj):
         raise CouldntSerialize
     return to_json()
     
-# Must come before map_queryset because ValuesQuerySet is
-# a subclass of Queryset and will cause an infinite loop :(
-@register_typemap(ValuesQuerySet)
-def map_values_queryset(obj):
-    return list(obj)
 
 @register_typemap(QuerySet)
 def map_queryset(obj):
