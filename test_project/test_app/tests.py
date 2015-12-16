@@ -45,18 +45,18 @@ class JsonateTests(TestCase):
     
     def test_basic_serialization(self):
         mymodel_data = {
-            "float_field": 32.25, 
-            "normal_field1": "field1", 
-            "normal_field2": "field2", 
-            "boolean_field": True, 
-            "null_field": None, 
-            "decimal_field": 32.25,
-            "foreign_key": 1, 
-            "datetime_field": "2011-01-11T11:11:11", 
-            "image_field": "images/image_file.wbm", 
-            "date_field": "2011-01-11", 
-            "id": 1, 
-            "file_field": "files/text_file.txt"
+            u"float_field": 32.25,
+            u"normal_field1": u"field1",
+            u"normal_field2": u"field2",
+            u"boolean_field": True,
+            u"null_field": None,
+            u"decimal_field": 32.25,
+            "foreign_key": 1,
+            u"datetime_field": u"2011-01-11T11:11:11",
+            u"image_field": u"images/image_file.wbm",
+            u"date_field": u"2011-01-11",
+            "id": 1,
+            u"file_field": u"files/text_file.txt"
         }
         self.assertJsonEqual(jsonate(self.model), mymodel_data)
         self.assertJsonEqual(jsonate(MyModel.objects.all()), [mymodel_data])
