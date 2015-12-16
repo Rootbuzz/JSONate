@@ -68,11 +68,22 @@ def map_queryset(obj):
     if hasattr(obj.model, 'to_json') or hasattr(obj.model, 'toJSON'):
         return list(obj)
 
+    #
     # otherwise using values is faster
-    fields = jsonate_fields(obj.model)
+    #
+
+    if not obj.exists():
+        return []
+
+    if isinstance(obj[0], dict):
+        fields = obj[0].keys()
+    else:
+        fields = [field.name for field in jsonate_fields(obj.model)]
+
     return list(
-        obj.values(*[field.name for field in fields])
+        obj.values(*fields)
     )
+
 
 @register_typemap(Model)
 def map_model_instance(obj):

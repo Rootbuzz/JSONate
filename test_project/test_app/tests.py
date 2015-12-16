@@ -51,11 +51,11 @@ class JsonateTests(TestCase):
             u"boolean_field": True,
             u"null_field": None,
             u"decimal_field": 32.25,
-            "foreign_key": 1,
+            u"foreign_key": 1,
             u"datetime_field": u"2011-01-11T11:11:11",
             u"image_field": u"images/image_file.wbm",
             u"date_field": u"2011-01-11",
-            "id": 1,
+            u"id": 1,
             u"file_field": u"files/text_file.txt"
         }
         self.assertJsonEqual(jsonate(self.model), mymodel_data)
