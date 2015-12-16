@@ -1,7 +1,17 @@
 from datetime import datetime, date
 from decimal import Decimal
 import json
+
 from django.db.models.query import QuerySet
+
+import django
+django_19 = (django.VERSION >= (1,9))
+
+if django_19:
+    from django.db.models.query import ModelIterable
+else:
+    from django.db.models.query import ValuesQuerySet
+
 from django.db.models import Model
 from django.db.models.fields.related import ForeignKey
 from django.db.models.fields.files import FieldFile
@@ -62,27 +72,31 @@ def map_object(obj):
     return to_json()
 
 
+if not django_19:
+    # Must come before map_queryset because ValuesQuerySet is
+    # a subclass of Queryset and will cause an infinite loop :(
+    @register_typemap(ValuesQuerySet)
+    def map_values_queryset(obj):
+        return list(obj)
+
 @register_typemap(QuerySet)
 def map_queryset(obj):
     # if the model wants to serialize itself, go with that...
     if hasattr(obj.model, 'to_json') or hasattr(obj.model, 'toJSON'):
         return list(obj)
 
-    #
     # otherwise using values is faster
-    #
+    if django_19:
+        if obj._iterable_class == ModelIterable:
 
-    if not obj.exists():
-        return []
+            fields = jsonate_fields(obj.model)
+            obj = obj.values(*[field.name for field in fields])
 
-    if isinstance(obj[0], dict):
-        fields = obj[0].keys()
+        return list(obj)
+
     else:
-        fields = [field.name for field in jsonate_fields(obj.model)]
-
-    return list(
-        obj.values(*fields)
-    )
+        fields = jsonate_fields(obj.model)
+        return obj.values(*[field.name for field in fields])
 
 
 @register_typemap(Model)
