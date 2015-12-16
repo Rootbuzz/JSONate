@@ -61,11 +61,26 @@ class JsonateTests(TestCase):
         self.assertJsonEqual(jsonate(self.model), mymodel_data)
         self.assertJsonEqual(jsonate(MyModel.objects.all()), [mymodel_data])
         
-        user_data = [{
+        user_data_values = [{
             "username": 'asdf',
             "password": self.user.password
         }]
-        self.assertJsonEqual(jsonate(User.objects.values("username", "password")), user_data)
+        self.assertJsonEqual(
+            jsonate(User.objects.values("username", "password")),
+            user_data_values
+        )
+
+        user_data_values_list = [['asdf']]
+        self.assertJsonEqual(
+            jsonate(User.objects.values_list("username")),
+            user_data_values_list
+        )
+
+        user_data_values_list_flat = ['asdf']
+        self.assertJsonEqual(
+            jsonate(User.objects.values_list("username", flat=True)),
+            user_data_values_list_flat
+        )
 
 from django.core import management
 
