@@ -46,28 +46,39 @@ class JsonateTests(TestCase):
         self.assertEqual(obj1, obj2, *args, **kwargs)
 
     def test_jsonate_field(self):
-        some_test_dict = {"red":3, "orange":451}
+        def assertJSONField(to_write):
+            obj.some_json_data = to_write
+            obj.save()
 
-        def assertJsonField(expected=some_test_dict):
             self.assertEqual(
                 MyModelWithJsonateField.objects.first().some_json_data,
-                expected
+                to_write
             )
 
-        MyModelWithJsonateField.objects.create(
-            some_name="test row with json data",
-            some_json_data=some_test_dict
-        )
-        assertJsonField()
-
-        MyModelWithJsonateField.objects.all().delete()
         obj = MyModelWithJsonateField(some_name="test row with json data")
-        obj.save()
-        assertJsonField(None)
 
-        obj.some_json_data = some_test_dict
-        obj.save()
-        assertJsonField()
+        test_data = [
+            None,
+            {"red":3, "orange":451},
+            [{"red":3, "orange":451}, {"green":"dark", "white":"bright"}, None, ["A", "B"]]
+        ]
+
+        for td in test_data:
+            assertJSONField(td)
+
+        # all together
+        assertJSONField(test_data)
+
+    def test_jsonate_field_in_values_list_gets_deserialized(self):
+        expected = []
+        for i in range(0, 5):
+            to_create = {"some_name": u"name{}".format(i), "some_json_data":{u"item_{}".format(i): i}}
+            MyModelWithJsonateField.objects.create(**to_create)
+            expected.append((to_create["some_name"], to_create["some_json_data"]))
+
+        vl = MyModelWithJsonateField.objects.order_by("id").values_list("some_name", "some_json_data")
+        for (index, elem) in enumerate(vl):
+            self.assertEqual(elem, expected[index])
 
     def test_basic_serialization(self):
         mymodel_data = {
