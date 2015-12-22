@@ -50,9 +50,11 @@ class JsonateTests(TestCase):
             obj.some_json_data = to_write
             obj.save()
 
+            expected = json.loads(to_write) if isinstance(to_write, basestring) else to_write
+
             self.assertEqual(
                 MyModelWithJsonateField.objects.first().some_json_data,
-                to_write
+                expected
             )
 
         obj = MyModelWithJsonateField(some_name="test row with json data")
@@ -60,7 +62,8 @@ class JsonateTests(TestCase):
         test_data = [
             None,
             {"red":3, "orange":451},
-            [{"red":3, "orange":451}, {"green":"dark", "white":"bright"}, None, ["A", "B"]]
+            [{"red":3, "orange":451}, {"green":"dark", "white":"bright"}, None, ["A", "B"]],
+            '["house", "mouse", "strauss"]'
         ]
 
         for td in test_data:

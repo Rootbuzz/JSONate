@@ -21,7 +21,9 @@ class JsonateField(models.TextField):
         if value == "":
             return None
 
-        value = jsonate(value)
+        if not isinstance(value, basestring):
+            value = jsonate(value)
+
         return super(JsonateField, self).get_db_prep_save(value, *args, **kwargs)
     
     def formfield(self, **kwargs):
