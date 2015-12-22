@@ -31,6 +31,9 @@ class JsonateField(models.TextField):
         }
         defaults.update(kwargs)
         return super(JsonateField, self).formfield(**defaults)
-    
-from south.modelsinspector import add_introspection_rules
-add_introspection_rules([], ["^jsonate\.fields\.JsonateField"])
+
+try:
+    from south.modelsinspector import add_introspection_rules
+    add_introspection_rules([], ["^jsonate\.fields\.JsonateField"])
+except:
+    pass

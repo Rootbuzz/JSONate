@@ -1,7 +1,10 @@
 from datetime import datetime, date
 from decimal import Decimal
+
 from django.db import models
 from django.contrib.auth.models import User
+
+from jsonate.fields import JsonateField
 
 class MyModel(models.Model):
     foreign_key = models.ForeignKey(User)
@@ -24,3 +27,7 @@ class MyModel(models.Model):
     
     class Meta:
         jsonate_exclude = ('sensitive_field1',)
+
+class MyModelWithJsonateField(models.Model):
+    some_name = models.CharField(max_length=255)
+    some_json_data = JsonateField(null=True, blank=True)

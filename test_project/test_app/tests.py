@@ -1,15 +1,17 @@
 from os import unlink, rmdir
 from os.path import join
 from glob import glob
+import json
 import unittest
+
+from jsonate import jsonate
 
 from django.test import TestCase
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.files.base import ContentFile
-from test_app.models import MyModel
-from jsonate import jsonate
-import json
+
+from .models import MyModel, MyModelWithJsonateField
 
 def destroy_media_folder(folder):
     path = join(settings.MEDIA_ROOT, folder)
@@ -42,7 +44,20 @@ class JsonateTests(TestCase):
             obj2 = json.loads(obj2)
         
         self.assertEqual(obj1, obj2, *args, **kwargs)
-    
+
+    def test_jsonate_field(self):
+        some_test_dict = {"red":3, "orange":451}
+
+        MyModelWithJsonateField.objects.create(
+            some_name="test row with json data",
+            some_json_data=some_test_dict
+        )
+
+        self.assertEqual(
+            MyModelWithJsonateField.objects.first().some_json_data,
+            some_test_dict
+        )
+
     def test_basic_serialization(self):
         mymodel_data = {
             u"float_field": 32.25,
