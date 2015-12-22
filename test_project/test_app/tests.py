@@ -48,15 +48,26 @@ class JsonateTests(TestCase):
     def test_jsonate_field(self):
         some_test_dict = {"red":3, "orange":451}
 
+        def assertJsonField(expected=some_test_dict):
+            self.assertEqual(
+                MyModelWithJsonateField.objects.first().some_json_data,
+                expected
+            )
+
         MyModelWithJsonateField.objects.create(
             some_name="test row with json data",
             some_json_data=some_test_dict
         )
+        assertJsonField()
 
-        self.assertEqual(
-            MyModelWithJsonateField.objects.first().some_json_data,
-            some_test_dict
-        )
+        MyModelWithJsonateField.objects.all().delete()
+        obj = MyModelWithJsonateField(some_name="test row with json data")
+        obj.save()
+        assertJsonField(None)
+
+        obj.some_json_data = some_test_dict
+        obj.save()
+        assertJsonField()
 
     def test_basic_serialization(self):
         mymodel_data = {
