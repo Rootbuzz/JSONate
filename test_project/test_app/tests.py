@@ -10,8 +10,9 @@ from django.test import TestCase
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.files.base import ContentFile
+from django.forms import ModelForm
 
-from .models import MyModel, MyModelWithJsonateField
+from .models import MyModel, MyModelWithJsonateField, WithJsonateFieldExpectingList
 
 def destroy_media_folder(folder):
     path = join(settings.MEDIA_ROOT, folder)
@@ -72,7 +73,35 @@ class JsonateTests(TestCase):
         # all together
         assertJSONField(test_data)
 
+    def assertJsonateFieldForm(self, model_class, data_to_store):
+        class JsonateFieldForm(ModelForm):
+            class Meta:
+                model = model_class
+                fields = '__all__'
+
+        f = JsonateFieldForm({
+            "some_json_data": json.dumps(data_to_store),
+            "some_name": "testing form"
+        })
+
+        self.assertTrue(f.is_valid())
+        f.save()
+
+        self.assertEqual(
+            model_class.objects.first().some_json_data,
+            data_to_store
+        )
+
+    def test_jsonate_field_clean_form(self):
+        dict_to_store = {"red":3, "orange":451}
+        self.assertJsonateFieldForm(MyModelWithJsonateField, dict_to_store)
+
+    def test_jsonate_field_clean_form_with_validation(self):
+        list_to_store = ["house", "mouse", "strauss"]
+        self.assertJsonateFieldForm(WithJsonateFieldExpectingList, list_to_store)
+
     def test_jsonate_field_in_values_list_gets_deserialized(self):
+        # works this way since django 1.8
         expected = []
         for i in range(0, 5):
             to_create = {"some_name": u"name{}".format(i), "some_json_data":{u"item_{}".format(i): i}}
