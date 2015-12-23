@@ -1,11 +1,13 @@
-from django.db import models
 import json
-from jsonate.utils import jsonate
-from jsonate.widgets import JsonateWidget
-from jsonate.form_fields import JsonateFormField
+
+from django.db import models
+
+from .utils import jsonate
+from .widgets import JsonateWidget
+from .form_fields import JsonateFormField
 
 class JsonateField(models.TextField):
-    def from_db_value(self, value, expression, connection, context):
+    def _deserialize(self, value):
         if value == "":
             return None
 
@@ -17,15 +19,21 @@ class JsonateField(models.TextField):
 
         return value
 
-    def get_db_prep_save(self, value, *args, **kwargs):
+    def from_db_value(self, value, expression, connection, context):
+        return self._deserialize(value)
+
+    def to_python(self, value):
+        return self._deserialize(value)
+
+    def get_db_prep_value(self, value, connection, prepared=False):
         if value == "":
             return None
 
         if not isinstance(value, basestring):
             value = jsonate(value)
 
-        return super(JsonateField, self).get_db_prep_save(value, *args, **kwargs)
-    
+        return value
+
     def formfield(self, **kwargs):
         defaults = {
             'form_class': JsonateFormField,
