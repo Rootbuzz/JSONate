@@ -1,6 +1,12 @@
+try:
+    import json
+except ImportError:
+    from django.utils import simplejson as json
+
 from django import forms
 
 from .utils import jsonate
+
 
 class JsonateWidget(forms.Textarea):
     

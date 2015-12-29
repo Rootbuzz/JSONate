@@ -5,7 +5,6 @@ env:
     - DJANGO=1.7
     - DJANGO=1.8
     - DJANGO=1.9
-matrix:
   allow_failures:
     - python: "3.2"
     - python: "3.3"
