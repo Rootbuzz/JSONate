@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='jsonate',
-    version='0.3.1',
+    version='0.3.2',
     
     author='James Robert',
     author_email='jiaaro@gmail.com',
@@ -13,10 +13,10 @@ setup(
     license='MIT',
     keywords='django json templatetags',
     
-    url='https://jsonate.com',
+    url='http://jsonate.com',
     
     install_requires=[
-        "django",
+        "django>=1.4",
     ],
     
     packages=[

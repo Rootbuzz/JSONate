@@ -1,8 +1,9 @@
 from datetime import datetime, date
 from decimal import Decimal
-import json
-
-from django.db.models.query import QuerySet
+try:
+    import json
+except ImportError:
+    from django.utils import simplejson as json
 
 import django
 django_19 = (django.VERSION >= (1,9))
@@ -12,11 +13,12 @@ if django_19:
 else:
     from django.db.models.query import ValuesQuerySet
 
+from django.db.models.query import QuerySet
 from django.db.models import Model
 from django.db.models.fields.related import ForeignKey
 from django.db.models.fields.files import FieldFile
 
-from jsonate.exceptions import CouldntSerialize
+from .exceptions import CouldntSerialize
 
 # Custom encoder using a list of mapping functions
 type_map = []

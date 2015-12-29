@@ -1,0 +1,39 @@
+env:
+  global:
+    - DJANGO_SETTINGS_MODULE=test_project.settings
+  matrix:
+    - DJANGO=1.4
+    - DJANGO=1.5
+    - DJANGO=1.6
+    - DJANGO=1.7
+matrix:
+  exclude:
+    - python: "3.2"
+      env: DJANGO=1.4
+    - python: "3.3"
+      env: DJANGO=1.4
+    - python: "3.4"
+      env: DJANGO=1.4
+    - python: "3.4"
+      env: DJANGO=1.5
+    - python: "3.4"
+      env: DJANGO=1.6
+    - python: "2.6"
+      env: DJANGO=1.7
+    - python: "2.6"
+      env: DJANGO=dev
+  allow_failures:
+    - python: "3.2"
+    - python: "3.3"
+    - python: "3.4"
+install:
+  - pip install django==${DJANGO} Pillow
+  - pip install .
+language: python
+python:
+  - "2.6"
+  - "2.7"
+  - "3.2"
+  - "3.3"
+  - "3.4"
+script: python test_project/manage.py test test_app

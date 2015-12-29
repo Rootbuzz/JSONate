@@ -1,5 +1,6 @@
 from django import forms
-from jsonate.utils import jsonate
+
+from .utils import jsonate
 
 class JsonateWidget(forms.Textarea):
     

@@ -1,4 +1,7 @@
-import json
+try:
+    import json
+except ImportError:
+    from django.utils import simplejson as json
 
 from django.db import models
 
@@ -40,4 +43,5 @@ class JsonateField(models.TextField):
             'widget': JsonateWidget
         }
         defaults.update(kwargs)
+
         return super(JsonateField, self).formfield(**defaults)

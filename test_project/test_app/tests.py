@@ -4,13 +4,13 @@ from glob import glob
 import json
 import unittest
 
-from jsonate import jsonate
-
 from django.test import TestCase
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.files.base import ContentFile
 from django.forms import ModelForm
+
+from jsonate import jsonate
 
 from .models import MyModel, MyModelWithJsonateField, WithJsonateFieldExpectingList
 
@@ -127,6 +127,7 @@ class JsonateTests(TestCase):
             u"id": 1,
             u"file_field": u"files/text_file.txt"
         }
+
         self.assertJsonEqual(jsonate(self.model), mymodel_data)
         self.assertJsonEqual(jsonate(MyModel.objects.all()), [mymodel_data])
         
