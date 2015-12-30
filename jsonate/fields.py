@@ -6,10 +6,14 @@ except ImportError:
 from django.db import models
 
 from .utils import jsonate
+from .django_ver import django_19
 from .widgets import JsonateWidget
 from .form_fields import JsonateFormField
 
 class JsonateField(models.TextField):
+    if not django_19:
+        __metaclass__ =  models.SubfieldBase
+
     def _deserialize(self, value):
         if value == "":
             return None

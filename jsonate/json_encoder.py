@@ -5,9 +5,7 @@ try:
 except ImportError:
     from django.utils import simplejson as json
 
-import django
-django_19 = (django.VERSION >= (1,9))
-
+from .django_ver import django_19
 if django_19:
     from django.db.models.query import ModelIterable
 else:
