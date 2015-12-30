@@ -1,2 +1,3 @@
-from jsonate.utils import jsonate
-from . import monkey_patches
+from .utils import jsonate
+
+default_app_config = 'jsonate.apps.JsonateAppConfig'

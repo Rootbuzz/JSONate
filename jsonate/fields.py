@@ -1,16 +1,20 @@
-from django.db import models
 try:
     import json
 except ImportError:
     from django.utils import simplejson as json
-from jsonate.utils import jsonate
-from jsonate.widgets import JsonateWidget
-from jsonate.form_fields import JsonateFormField
+
+from django.db import models
+
+from .utils import jsonate
+from .django_ver import django_19
+from .widgets import JsonateWidget
+from .form_fields import JsonateFormField
 
 class JsonateField(models.TextField):
-    __metaclass__ = models.SubfieldBase
+    if not django_19:
+        __metaclass__ =  models.SubfieldBase
 
-    def to_python(self, value):
+    def _deserialize(self, value):
         if value == "":
             return None
 
@@ -19,24 +23,29 @@ class JsonateField(models.TextField):
                 return json.loads(value)
         except ValueError:
             pass
+
         return value
 
-    def get_db_prep_save(self, value, *args, **kwargs):
+    def from_db_value(self, value, expression, connection, context):
+        return self._deserialize(value)
+
+    def to_python(self, value):
+        return self._deserialize(value)
+
+    def get_db_prep_value(self, value, connection, prepared=False):
         if value == "":
             return None
-        value = jsonate(value)
-        return super(JsonateField, self).get_db_prep_save(value, *args, **kwargs)
-    
+
+        if not isinstance(value, basestring):
+            value = jsonate(value)
+
+        return value
+
     def formfield(self, **kwargs):
         defaults = {
             'form_class': JsonateFormField,
             'widget': JsonateWidget
         }
         defaults.update(kwargs)
-        return super(JsonateField, self).formfield(**defaults)
 
-try:
-    from south.modelsinspector import add_introspection_rules
-    add_introspection_rules([], ["^jsonate\.fields\.JsonateField"])
-except ImportError:
-    pass
+        return super(JsonateField, self).formfield(**defaults)

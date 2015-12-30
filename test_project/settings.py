@@ -11,8 +11,9 @@ SECRET_KEY = "thisIsTotallyASecretJkLolHaHa!1!!1!"
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'test_jsonate'
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'test_jsonate',
+        'USER': 'postgres'
     }
 }
 
@@ -22,6 +23,8 @@ MEDIA_URL = '/media/'
 TEMPLATE_DIRS = (
     os.path.join(PROJECT_ROOT, 'templates'),
 )
+
+SECRET_KEY = "dna_kzxq8(QbM=-#ZyyA&k,Fi1LU>&bQ4ZA+|(e<g-.%L0JnaK"
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
