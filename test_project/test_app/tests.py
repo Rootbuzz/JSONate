@@ -11,8 +11,10 @@ from django.core.files.base import ContentFile
 from django.forms import ModelForm
 
 from jsonate import jsonate
+from jsonate.django_ver import django_18
 
 from .models import MyModel, MyModelWithJsonateField, WithJsonateFieldExpectingList
+
 
 def destroy_media_folder(folder):
     path = join(settings.MEDIA_ROOT, folder)
@@ -101,12 +103,16 @@ class JsonateTests(TestCase):
         self.assertJsonateFieldForm(WithJsonateFieldExpectingList, list_to_store)
 
     def test_jsonate_field_in_values_list_gets_deserialized(self):
-        # works this way since django 1.8
         expected = []
         for i in range(0, 5):
-            to_create = {"some_name": u"name{}".format(i), "some_json_data":{u"item_{}".format(i): i}}
+
+            to_create = {"some_name": u"name{}".format(i), "some_json_data": {u"item_{}".format(i): i}}
             MyModelWithJsonateField.objects.create(**to_create)
-            expected.append((to_create["some_name"], to_create["some_json_data"]))
+
+            if django_18:
+                expected.append((to_create["some_name"], to_create["some_json_data"]))
+            else:
+                expected.append((to_create["some_name"], json.dumps(to_create["some_json_data"])))
 
         vl = MyModelWithJsonateField.objects.order_by("id").values_list("some_name", "some_json_data")
         for (index, elem) in enumerate(vl):
