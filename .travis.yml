@@ -10,8 +10,12 @@ env:
     - python: "3.3"
     - python: "3.4"
 install:
-  - pip install django==${DJANGO} Pillow
+  - pip install django==${DJANGO} Pillow psycopg2
   - pip install .
+addons:
+  postgresql: "9.3"
+before_script:
+  - psql -c 'create database test_jsonate;' -U postgres
 language: python
 python:
   - "2.7"
