@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 from __future__ import absolute_import
+
 import os
+import sys
 
 try:
     import settings # Assumed to be in the same directory.
@@ -13,10 +15,5 @@ except ImportError:
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "test_project.settings")
 
-    try:
-        from django.core.management import execute_from_command_line 
-        execute_from_command_line()
-
-    except ImportError:
-        from django.core.management import execute_manager
-        execute_manager(settings)
+    from django.core.management import execute_from_command_line
+    execute_from_command_line(sys.argv)
