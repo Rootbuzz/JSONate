@@ -1,3 +1,9 @@
+from __future__ import unicode_literals
+
+from builtins import range
+from builtins import str
+from builtins import object
+
 from os import unlink, rmdir
 from os.path import join
 from glob import glob
@@ -43,7 +49,7 @@ class JsonateTests(TestCase):
     def assertJsonEqual(self, obj1, obj2, *args, **kwargs):
         obj1 = json.loads(obj1)
         
-        if isinstance(obj2, basestring):
+        if isinstance(obj2, str):
             obj2 = json.loads(obj2)
         
         self.assertEqual(obj1, obj2, *args, **kwargs)
@@ -53,7 +59,7 @@ class JsonateTests(TestCase):
             obj.some_json_data = to_write
             obj.save()
 
-            expected = json.loads(to_write) if isinstance(to_write, basestring) else to_write
+            expected = json.loads(to_write) if isinstance(to_write, str) else to_write
 
             self.assertEqual(
                 MyModelWithJsonateField.objects.first().some_json_data,
@@ -77,7 +83,7 @@ class JsonateTests(TestCase):
 
     def assertJsonateFieldForm(self, model_class, data_to_store):
         class JsonateFieldForm(ModelForm):
-            class Meta:
+            class Meta(object):
                 model = model_class
                 fields = '__all__'
 
@@ -106,7 +112,7 @@ class JsonateTests(TestCase):
         expected = []
         for i in range(0, 5):
 
-            to_create = {"some_name": u"name{}".format(i), "some_json_data": {u"item_{}".format(i): i}}
+            to_create = {"some_name": "name{}".format(i), "some_json_data": {"item_{}".format(i): i}}
             MyModelWithJsonateField.objects.create(**to_create)
 
             if django_18:
@@ -120,18 +126,18 @@ class JsonateTests(TestCase):
 
     def test_basic_serialization(self):
         mymodel_data = {
-            u"float_field": 32.25,
-            u"normal_field1": u"field1",
-            u"normal_field2": u"field2",
-            u"boolean_field": True,
-            u"null_field": None,
-            u"decimal_field": 32.25,
-            u"foreign_key": 1,
-            u"datetime_field": u"2011-01-11T11:11:11",
-            u"image_field": u"images/image_file.wbm",
-            u"date_field": u"2011-01-11",
-            u"id": 1,
-            u"file_field": u"files/text_file.txt"
+            "float_field": 32.25,
+            "normal_field1": "field1",
+            "normal_field2": "field2",
+            "boolean_field": True,
+            "null_field": None,
+            "decimal_field": 32.25,
+            "foreign_key": 1,
+            "datetime_field": "2011-01-11T11:11:11",
+            "image_field": "images/image_file.wbm",
+            "date_field": "2011-01-11",
+            "id": 1,
+            "file_field": "files/text_file.txt"
         }
 
         self.assertJsonEqual(jsonate(self.model), mymodel_data)

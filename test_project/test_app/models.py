@@ -1,3 +1,4 @@
+from builtins import object
 from datetime import datetime, date
 from decimal import Decimal
 
@@ -25,7 +26,7 @@ class MyModel(models.Model):
     boolean_field = models.BooleanField(default=True)
     null_field = models.NullBooleanField(default=None)
     
-    class Meta:
+    class Meta(object):
         jsonate_exclude = ('sensitive_field1',)
 
 class MyModelWithJsonateField(models.Model):
