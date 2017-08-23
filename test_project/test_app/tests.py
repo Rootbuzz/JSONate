@@ -1,7 +1,7 @@
 from __future__ import unicode_literals
 
 from builtins import range
-from builtins import str
+from past.builtins import basestring
 from builtins import object
 
 from os import unlink, rmdir
@@ -49,7 +49,7 @@ class JsonateTests(TestCase):
     def assertJsonEqual(self, obj1, obj2, *args, **kwargs):
         obj1 = json.loads(obj1)
         
-        if isinstance(obj2, str):
+        if isinstance(obj2, basestring):
             obj2 = json.loads(obj2)
         
         self.assertEqual(obj1, obj2, *args, **kwargs)
@@ -59,7 +59,7 @@ class JsonateTests(TestCase):
             obj.some_json_data = to_write
             obj.save()
 
-            expected = json.loads(to_write) if isinstance(to_write, str) else to_write
+            expected = json.loads(to_write) if isinstance(to_write, basestring) else to_write
 
             self.assertEqual(
                 MyModelWithJsonateField.objects.first().some_json_data,

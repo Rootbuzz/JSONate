@@ -1,4 +1,4 @@
-from builtins import str
+from past.builtins import basestring
 try:
     import json
 except ImportError:
@@ -20,7 +20,7 @@ class JsonateField(models.TextField):
             return None
 
         try:
-            if isinstance(value, str):
+            if isinstance(value, basestring):
                 return json.loads(value)
         except ValueError:
             pass
@@ -37,7 +37,7 @@ class JsonateField(models.TextField):
         if value == "":
             return None
 
-        if not isinstance(value, str):
+        if not isinstance(value, basestring):
             value = jsonate(value)
 
         return value
