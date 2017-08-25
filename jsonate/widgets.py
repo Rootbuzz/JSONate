@@ -1,3 +1,4 @@
+from past.builtins import basestring
 try:
     import json
 except ImportError:
