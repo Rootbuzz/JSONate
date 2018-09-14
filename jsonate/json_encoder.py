@@ -103,17 +103,7 @@ def map_queryset(obj):
 @register_typemap(Manager)
 def map_manager(obj):
     qs = obj.get_queryset()
-    # otherwise using values is faster
-    if django_19:
-        if qs._iterable_class == ModelIterable:
-            fields = jsonate_fields(qs.model)
-            qs = qs.values(*[field.name for field in fields])
-
-        return list(qs)
-
-    else:
-        fields = jsonate_fields(qs.model)
-        return qs.values(*[field.name for field in fields])
+    return qs
 
 @register_typemap(Model)
 def map_model_instance(obj):
