@@ -12,7 +12,7 @@ else:
     from django.db.models.query import ValuesQuerySet
 
 from django.db.models.query import QuerySet
-from django.db.models import Model
+from django.db.models import Model, Manager
 from django.db.models.fields.related import ForeignKey
 from django.db.models.fields.files import FieldFile
 
@@ -54,8 +54,9 @@ def jsonate_fields(model):
     fields = getattr(model._meta, 'jsonate_fields', all_fields)
     
     serialize = set(fields).difference(set(excluded))
-    
-    return tuple(field for field in model._meta.fields 
+
+    # Getting all fields, including hidden fields as options
+    return tuple(field for field in model._meta.get_fields()
                     if field.name in serialize)
     
 #########################
@@ -98,6 +99,21 @@ def map_queryset(obj):
         fields = jsonate_fields(obj.model)
         return obj.values(*[field.name for field in fields])
 
+# Managers are typically hidden fields, and must be specified via meta fields
+@register_typemap(Manager)
+def map_manager(obj):
+    qs = obj.get_queryset()
+    # otherwise using values is faster
+    if django_19:
+        if qs._iterable_class == ModelIterable:
+            fields = jsonate_fields(qs.model)
+            qs = qs.values(*[field.name for field in fields])
+
+        return list(qs)
+
+    else:
+        fields = jsonate_fields(qs.model)
+        return qs.values(*[field.name for field in fields])
 
 @register_typemap(Model)
 def map_model_instance(obj):

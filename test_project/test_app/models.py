@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from jsonate.fields import JsonateField
 
 class MyModel(models.Model):
-    foreign_key = models.ForeignKey(User)
+    foreign_key = models.ForeignKey(User, on_delete=models.CASCADE)
     normal_field1 = models.CharField(max_length=25, default="field1")
     normal_field2 = models.CharField(max_length=25, default='field2')
     
@@ -28,6 +28,10 @@ class MyModel(models.Model):
     
     class Meta(object):
         jsonate_exclude = ('sensitive_field1',)
+
+class MyModelWithRelation(models.Model):
+    name = models.CharField(max_length=100)
+    to_many = models.ManyToManyField(MyModel, related_name="many_to_my_model")
 
 class MyModelWithJsonateField(models.Model):
     some_name = models.CharField(max_length=255)
