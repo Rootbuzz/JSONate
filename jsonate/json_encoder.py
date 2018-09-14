@@ -102,8 +102,7 @@ def map_queryset(obj):
 # Managers are typically hidden fields, and must be specified via meta fields
 @register_typemap(Manager)
 def map_manager(obj):
-    qs = obj.get_queryset()
-    return qs
+    return obj.get_queryset()
 
 @register_typemap(Model)
 def map_model_instance(obj):
