@@ -15,7 +15,7 @@ class JsonateField(models.TextField):
             return None
 
         try:
-            if isinstance(value, basestring):
+            if isinstance(value, str):
                 return json.loads(value)
         except ValueError:
             pass
@@ -32,7 +32,7 @@ class JsonateField(models.TextField):
         if value == "":
             return None
 
-        if not isinstance(value, basestring):
+        if not isinstance(value, str):
             value = jsonate(value)
 
         return value

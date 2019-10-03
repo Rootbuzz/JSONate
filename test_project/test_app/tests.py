@@ -11,7 +11,6 @@ from django.core.files.base import ContentFile
 from django.forms import ModelForm
 
 from jsonate import jsonate
-from jsonate.django_ver import django_18
 
 from .models import MyModel, MyModelWithJsonateField, WithJsonateFieldExpectingList, MyModelWithRelation
 
@@ -46,7 +45,7 @@ class JsonateTests(TestCase):
     def assertJsonEqual(self, obj1, obj2, *args, **kwargs):
         obj1 = json.loads(obj1)
         
-        if isinstance(obj2, basestring):
+        if isinstance(obj2, str):
             obj2 = json.loads(obj2)
         
         self.assertEqual(obj1, obj2, *args, **kwargs)
@@ -56,7 +55,7 @@ class JsonateTests(TestCase):
             obj.some_json_data = to_write
             obj.save()
 
-            expected = json.loads(to_write) if isinstance(to_write, basestring) else to_write
+            expected = json.loads(to_write) if isinstance(to_write, str) else to_write
 
             self.assertEqual(
                 MyModelWithJsonateField.objects.first().some_json_data,
@@ -112,10 +111,7 @@ class JsonateTests(TestCase):
             to_create = {"some_name": "name{}".format(i), "some_json_data": {"item_{}".format(i): i}}
             MyModelWithJsonateField.objects.create(**to_create)
 
-            if django_18:
-                expected.append((to_create["some_name"], to_create["some_json_data"]))
-            else:
-                expected.append((to_create["some_name"], json.dumps(to_create["some_json_data"])))
+            expected.append((to_create["some_name"], json.dumps(to_create["some_json_data"])))
 
         vl = MyModelWithJsonateField.objects.order_by("id").values_list("some_name", "some_json_data")
         for (index, elem) in enumerate(vl):
