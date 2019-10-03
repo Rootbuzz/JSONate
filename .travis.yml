@@ -1,28 +1,15 @@
-sudo: false
-dist: trusty
+env:
+  - DJANGO=2.0
+  - DJANGO=2.1
+  - DJANGO=2.2
 language: python
 python:
-  - "2.7"
   - "3.6"
+  - "3.7"
 addons:
-  postgresql: "9.5"
-env:
-  global:
-    - DJANGO_SETTINGS_MODULE=test_project.settings
-  matrix:
-    - DJANGO=1.9
-    - DJANGO=1.10
-    - DJANGO=1.11
-    - DJANGO=2.0
-    - DJANGO=2.1
-    matrix:
-      exclude:
-        - python: "2.7"
-          env: DJANGO=2.0
-        - python: "2.7"
-          env: DJANGO=2.1
+  postgresql: "10"
 install:
-  - pip install django==${DJANGO} Pillow psycopg2
+  - pip install django==${DJANGO} Pillow psycopg2-binary
   - pip install .
 before_script:
   - psql -c 'create database test_jsonate;' -U postgres
