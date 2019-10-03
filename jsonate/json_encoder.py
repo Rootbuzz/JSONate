@@ -5,12 +5,7 @@ try:
 except ImportError:
     from django.utils import simplejson as json
 
-from .django_ver import django_19
-if django_19:
-    from django.db.models.query import ModelIterable
-else:
-    from django.db.models.query import ValuesQuerySet
-
+from django.db.models.query import ModelIterable
 from django.db.models.query import QuerySet
 from django.db.models import Model, Manager
 from django.db.models.fields.related import ForeignKey
@@ -72,14 +67,6 @@ def map_object(obj):
         raise CouldntSerialize
     return to_json()
 
-
-if not django_19:
-    # Must come before map_queryset because ValuesQuerySet is
-    # a subclass of Queryset and will cause an infinite loop :(
-    @register_typemap(ValuesQuerySet)
-    def map_values_queryset(obj):
-        return list(obj)
-
 @register_typemap(QuerySet)
 def map_queryset(obj):
     # if the model wants to serialize itself, go with that...
@@ -87,17 +74,12 @@ def map_queryset(obj):
         return list(obj)
 
     # otherwise using values is faster
-    if django_19:
-        if obj._iterable_class == ModelIterable:
+    if obj._iterable_class == ModelIterable:
 
-            fields = jsonate_fields(obj.model)
-            obj = obj.values(*[field.name for field in fields])
-
-        return list(obj)
-
-    else:
         fields = jsonate_fields(obj.model)
-        return obj.values(*[field.name for field in fields])
+        obj = obj.values(*[field.name for field in fields])
+
+    return list(obj)
 
 # Managers are typically hidden fields, and must be specified via meta fields
 @register_typemap(Manager)

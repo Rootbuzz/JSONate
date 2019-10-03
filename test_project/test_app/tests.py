@@ -1,9 +1,3 @@
-from __future__ import unicode_literals
-
-from builtins import range
-from past.builtins import basestring
-from builtins import object
-
 from os import unlink, rmdir
 from os.path import join
 from glob import glob
@@ -86,7 +80,7 @@ class JsonateTests(TestCase):
 
     def assertJsonateFieldForm(self, model_class, data_to_store):
         class JsonateFieldForm(ModelForm):
-            class Meta(object):
+            class Meta:
                 model = model_class
                 fields = '__all__'
 
