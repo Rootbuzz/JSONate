@@ -9,6 +9,7 @@ setup(
     
     description=('Django library that can make ANYTHING into json'),
     long_description=open('README.markdown').read(),
+    long_description_content_type="text/markdown",
     
     license='MIT',
     keywords='django json templatetags',
