@@ -24,6 +24,26 @@ TEMPLATE_DIRS = (
     os.path.join(PROJECT_ROOT, 'templates'),
 )
 
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                "django.contrib.auth.context_processors.auth",
+                "django.template.context_processors.debug",
+                "django.template.context_processors.i18n",
+                "django.template.context_processors.media",
+                "django.template.context_processors.static",
+                "django.template.context_processors.tz",
+                "django.template.context_processors.request",
+                "django.contrib.messages.context_processors.messages",
+            ],
+            'debug': True,
+        },
+    }
+]
+
 SECRET_KEY = "dna_kzxq8(QbM=-#ZyyA&k,Fi1LU>&bQ4ZA+|(e<g-.%L0JnaK"
 
 MIDDLEWARE_CLASSES = (
@@ -33,6 +53,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
 )
+
+MIDDLEWARE = MIDDLEWARE_CLASSES
 
 ROOT_URLCONF = 'test_project.urls'
 
@@ -44,6 +66,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.admin',
+    'django.contrib.messages',
     
     'jsonate',
     'test_app',

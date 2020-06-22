@@ -27,7 +27,8 @@ def destroy_media_folder(folder):
     [unlink(f) for f in glob(join(path, "*"))]
     try: rmdir(path)
     except: pass
-            
+
+
 class JsonateTests(TestCase):        
     maxDiff = 10**4
     def setUp(self):

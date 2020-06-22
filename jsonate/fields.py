@@ -27,7 +27,7 @@ class JsonateField(models.TextField):
 
         return value
 
-    def from_db_value(self, value, expression, connection, context):
+    def from_db_value(self, value, expression, connection, context=None):
         return self._deserialize(value)
 
     def to_python(self, value):
