@@ -1,4 +1,3 @@
-from past.builtins import basestring
 try:
     import json
 except ImportError:
@@ -7,20 +6,16 @@ except ImportError:
 from django.db import models
 
 from .utils import jsonate
-from .django_ver import django_19
 from .widgets import JsonateWidget
 from .form_fields import JsonateFormField
 
 class JsonateField(models.TextField):
-    if not django_19:
-        __metaclass__ =  models.SubfieldBase
-
     def _deserialize(self, value):
         if value == "":
             return None
 
         try:
-            if isinstance(value, basestring):
+            if isinstance(value, str):
                 return json.loads(value)
         except ValueError:
             pass
@@ -37,7 +32,7 @@ class JsonateField(models.TextField):
         if value == "":
             return None
 
-        if not isinstance(value, basestring):
+        if not isinstance(value, str):
             value = jsonate(value)
 
         return value
